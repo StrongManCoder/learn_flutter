@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hi_cache/flutter_hi_cache.dart';
-import 'package:learn_flutter/dao/login_dao.dart';
-import 'package:learn_flutter/pages/home_page.dart';
-import 'package:learn_flutter/pages/login_page.dart';
+import 'package:learn_flutter/navigator/tab_navigator.dart';
+
+import 'dao/login_dao.dart';
+import 'pages/login_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
       // home: const FutureStudy(),
       //   home: const SPCounterWidget(),
       // home: const LoginPage(),
+      // home: ScreenFixPage(),
       home: FutureBuilder<dynamic>(
           future: HiCache.preInit(),
           builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -32,7 +34,7 @@ class MyApp extends StatelessWidget {
               if (LoginDao.getToken() == null) {
                 return const LoginPage();
               } else {
-                return const HomePage();
+                return const TabNavigator();
               }
             } else {
               return Scaffold(
