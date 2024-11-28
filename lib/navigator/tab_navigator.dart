@@ -18,7 +18,6 @@ class _TabNavigatorState extends State<TabNavigator> {
   final PageController _controller = PageController(initialPage: 0);
   final _defaultColor = Colors.grey;
   final _activeColor = Colors.blue;
-
   int _currentIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -36,6 +35,7 @@ class _TabNavigatorState extends State<TabNavigator> {
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
+          //默认颜色
           fixedColor: Colors.blue,
           currentIndex: _currentIndex,
           onTap: (index) {
