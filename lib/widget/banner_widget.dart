@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_flutter/util/screen_adapter_helper.dart';
 
+//封装轮播组件Widget
 class BannerWidget extends StatefulWidget {
   final List<String> bannerList;
 
@@ -33,7 +34,7 @@ class _BannerWidgetState extends State<BannerWidget> {
                 });
               }),
         ),
-        //
+        //bannner指示器 小点点
         Positioned(
           bottom: 10.px,
           left: 0,
@@ -53,6 +54,7 @@ class _BannerWidgetState extends State<BannerWidget> {
       child: Image.network(
         imageUrl,
         width: width,
+        //fit 图片显示方式
         fit: BoxFit.cover,
       ),
     );
@@ -68,8 +70,10 @@ class _BannerWidgetState extends State<BannerWidget> {
             width: 6,
             height: 6,
             margin: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-            decoration:
-                BoxDecoration(shape: BoxShape.circle, color: Colors.white),
+            decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: (Colors.blue)
+                    .withOpacity(_currentIndex == entry.key ? 0.9 : 0.4)),
           ),
         );
       }).toList(),
