@@ -20,7 +20,7 @@ class _HomePageState extends State<HomePage>
     'https://p4.ssl.qhimg.com/t01345cf34a1807d669.png'
   ];
 
-  double appBarAlpha = 1;
+  double appBarAlpha = 0;
   get _logoutBtn => TextButton(
       onPressed: () {
         LoginDao.logOut();
@@ -38,6 +38,7 @@ class _HomePageState extends State<HomePage>
             height: 800,
             child: ListTile(
               title: Text('哈哈哈'),
+              subtitle: Text('副标题啊'),
             ),
           )
         ],
@@ -87,6 +88,12 @@ class _HomePageState extends State<HomePage>
         //   children: <Widget>[BannerWidget(bannerList: bannerList)],
         // ),
         );
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
   }
 
   @override

@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hi_cache/flutter_hi_cache.dart';
-import 'package:learn_flutter/navigator/tab_navigator.dart';
-import 'package:learn_flutter/util/screen_adapter_helper.dart';
 
-import 'dao/login_dao.dart';
-import 'pages/login_page.dart';
+import 'pages/refresh_LoadMorePage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,24 +24,27 @@ class MyApp extends StatelessWidget {
       //   home: const SPCounterWidget(),
       // home: const LoginPage(),
       // home: ScreenFixPage(),
-      home: FutureBuilder<dynamic>(
-          future: HiCache.preInit(),
-          builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-            ScreenHelp.init(context);
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (LoginDao.getToken() == null) {
-                return const LoginPage();
-              } else {
-                return const TabNavigator();
-              }
-            } else {
-              return Scaffold(
-                body: Center(
-                  child: CircularProgressIndicator(),
-                ),
-              );
-            }
-          }),
+      // home: VerticalListPage(),
+      home: RefreshLoadMorePage(),
+
+      // home: FutureBuilder<dynamic>(
+      //     future: HiCache.preInit(),
+      //     builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+      //       ScreenHelp.init(context);
+      //       if (snapshot.connectionState == ConnectionState.done) {
+      //         if (LoginDao.getToken() == null) {
+      //           return const LoginPage();
+      //         } else {
+      //           return const TabNavigator();
+      //         }
+      //       } else {
+      //         return Scaffold(
+      //           body: Center(
+      //             child: CircularProgressIndicator(),
+      //           ),
+      //         );
+      //       }
+      //     }),
     );
   }
 }
