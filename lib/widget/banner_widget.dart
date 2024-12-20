@@ -1,10 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:learn_flutter/Model/home_model.dart';
+import 'package:learn_flutter/pages/webviewpage.dart';
 import 'package:learn_flutter/util/screen_adapter_helper.dart';
 
 //封装轮播组件Widget
 class BannerWidget extends StatefulWidget {
-  final List<String> bannerList;
+  final List<ActivityElement> bannerList;
 
   const BannerWidget({super.key, required this.bannerList});
 
@@ -22,7 +24,9 @@ class _BannerWidgetState extends State<BannerWidget> {
     return Stack(
       children: [
         CarouselSlider(
-          items: widget.bannerList.map((url) => _tabImage(url, width)).toList(),
+          items: widget.bannerList
+              .map((model) => _tabImage(model, width))
+              .toList(),
           carouselController: _controller,
           options: CarouselOptions(
               height: 160.px,
@@ -45,14 +49,24 @@ class _BannerWidgetState extends State<BannerWidget> {
     );
   }
 
-  Widget _tabImage(String imageUrl, width) {
+  Widget _tabImage(ActivityElement model, width) {
     return GestureDetector(
       onTap: () {
-        //点击跳转导航
+        //点击跳转内置WebViewPage页面并传入参数model.url
+        // NavigatorUtil.push(context, WebViewPage(url: model.url));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => WebViewPage(
+                url: model.url,
+                title: model.name,
+              ),
+            ));
+
         //TODO  NavigatorUtil
       },
       child: Image.network(
-        imageUrl,
+        model.realUrl,
         width: width,
         //fit 图片显示方式
         fit: BoxFit.cover,

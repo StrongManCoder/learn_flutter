@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:learn_flutter/Model/home_model.dart';
+import 'package:learn_flutter/dao/home_dao.dart';
 import 'package:learn_flutter/dao/login_dao.dart';
 import 'package:learn_flutter/widget/banner_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  static HomeModel? homeModel;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -12,28 +16,35 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin {
   static const appbarScrolloffset = 160;
-  final bannerList = [
-    'https://p1.ssl.qhimg.com/t01683f3a068943c2e3.png',
-    'https://p1.ssl.qhimg.com/t01e9ee778759020ddb.png',
-    'https://p1.ssl.qhimg.com/t01f7dfb7391d1f1de2.jpg',
-    'https://p1.ssl.qhimg.com/t01aa65ca167724f2c9.jpg',
-    'https://p4.ssl.qhimg.com/t01345cf34a1807d669.png'
-  ];
+  // final bannerList = [
+  //   'https://p1.ssl.qhimg.com/t01683f3a068943c2e3.png',
+  //   'https://p1.ssl.qhimg.com/t01e9ee778759020ddb.png',
+  //   'https://p1.ssl.qhimg.com/t01f7dfb7391d1f1de2.jpg',
+  //   'https://p1.ssl.qhimg.com/t01aa65ca167724f2c9.jpg',
+  //   'https://p4.ssl.qhimg.com/t01345cf34a1807d669.png'
+  // ];
 
   double appBarAlpha = 0;
+  List<ActivityElement> bannerList = [];
+  List<Nav> navStatic = [];
+  List<Nav> navActive = [];
+
   get _logoutBtn => TextButton(
       onPressed: () {
         LoginDao.logOut();
       },
       child: Text(
         "登出",
-        style: TextStyle(color: Colors.white, fontSize: 18),
+        style: TextStyle(color: Colors.black54, fontSize: 18),
       ));
 
   get _listView => ListView(
         children: [
           BannerWidget(bannerList: bannerList),
           _logoutBtn,
+          //可以滚动的长文本控件,长按复制文本内容
+          // SelectableText(Result.toString()),
+
           const SizedBox(
             height: 800,
             child: ListTile(
@@ -94,6 +105,7 @@ class _HomePageState extends State<HomePage>
   void initState() {
     // TODO: implement initState
     super.initState();
+    _handleRefresh();
   }
 
   @override
@@ -109,11 +121,26 @@ class _HomePageState extends State<HomePage>
       alpha = 1;
     }
 
-    print('alpha :$alpha');
+    // print('alpha :$alpha');
     setState(() {
       appBarAlpha = alpha;
     });
 
-    print('appBarAlpha :$appBarAlpha');
+    // print('appBarAlpha :$appBarAlpha');
+  }
+
+  Future<void> _handleRefresh() async {
+    try {
+      HomeModel? result = await HomeDao.fetch();
+
+      setState(() {
+        HomePage.homeModel = result;
+        bannerList = result!.activity ?? [];
+        navStatic = result!.navStatic ?? [];
+        navActive = result!.navActive ?? [];
+      });
+    } catch (error) {
+      debugPrint('错误信息是: $error');
+    }
   }
 }
