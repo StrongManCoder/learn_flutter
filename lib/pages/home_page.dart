@@ -3,6 +3,8 @@ import 'package:learn_flutter/Model/home_model.dart';
 import 'package:learn_flutter/dao/home_dao.dart';
 import 'package:learn_flutter/dao/login_dao.dart';
 import 'package:learn_flutter/widget/banner_widget.dart';
+import 'package:learn_flutter/widget/navonewidget.dart';
+import 'package:learn_flutter/widget/navtwowidget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -41,7 +43,9 @@ class _HomePageState extends State<HomePage>
   get _listView => ListView(
         children: [
           BannerWidget(bannerList: bannerList),
-          _logoutBtn,
+          Navonewidget(navStatic: navStatic),
+          NavTwoWidget(navActive: navActive),
+          // _logoutBtn,
           //可以滚动的长文本控件,长按复制文本内容
           // SelectableText(Result.toString()),
 
@@ -136,8 +140,8 @@ class _HomePageState extends State<HomePage>
       setState(() {
         HomePage.homeModel = result;
         bannerList = result!.activity ?? [];
-        navStatic = result!.navStatic ?? [];
-        navActive = result!.navActive ?? [];
+        navStatic = result.navStatic ?? [];
+        navActive = result.navActive ?? [];
       });
     } catch (error) {
       debugPrint('错误信息是: $error');

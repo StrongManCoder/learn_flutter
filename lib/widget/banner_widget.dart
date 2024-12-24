@@ -58,7 +58,9 @@ class _BannerWidgetState extends State<BannerWidget> {
             context,
             MaterialPageRoute(
               builder: (context) => WebViewPage(
-                url: model.url,
+                //model.url 拼接上city=1
+                url: "${model.url}?cityid=1",
+                // url: model.url,
                 title: model.name,
               ),
             ));
