@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learn_flutter/widget/sesrch_bar_widget.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -16,7 +17,7 @@ class _SearchPageState extends State<SearchPage> {
       ),
       body: Column(
         children: <Widget>[
-          const Text("搜索页面"),
+          SesrchBarWidget(),
         ],
       ),
     );

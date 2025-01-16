@@ -3,8 +3,9 @@ import 'package:learn_flutter/Model/home_model.dart';
 import 'package:learn_flutter/dao/home_dao.dart';
 import 'package:learn_flutter/dao/login_dao.dart';
 import 'package:learn_flutter/widget/banner_widget.dart';
+import 'package:learn_flutter/widget/loading_container.dart';
 import 'package:learn_flutter/widget/navonewidget.dart';
-import 'package:learn_flutter/widget/navtwowidget.dart';
+import 'package:learn_flutter/widget/sub_nav_widget.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -31,6 +32,8 @@ class _HomePageState extends State<HomePage>
   List<Nav> navStatic = [];
   List<Nav> navActive = [];
 
+  bool _isLoading = true;
+
   get _logoutBtn => TextButton(
       onPressed: () {
         LoginDao.logOut();
@@ -44,7 +47,8 @@ class _HomePageState extends State<HomePage>
         children: [
           BannerWidget(bannerList: bannerList),
           Navonewidget(navStatic: navStatic),
-          NavTwoWidget(navActive: navActive),
+          // NavTwoWidget(navActive: navActive),
+          SubNavWidget(subNavList: navActive),
           // _logoutBtn,
           //可以滚动的长文本控件,长按复制文本内容
           // SelectableText(Result.toString()),
@@ -62,6 +66,7 @@ class _HomePageState extends State<HomePage>
   get _appBar => Opacity(
       opacity: appBarAlpha,
       child: Container(
+        margin: EdgeInsets.only(top: 20),
         height: 100,
         decoration: const BoxDecoration(color: Colors.white),
         child: const Center(
@@ -75,24 +80,11 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-        body: Stack(
-      children: [
-        MediaQuery.removePadding(
-            removeTop: true, //移除顶部空白
-            context: context,
-            child: NotificationListener(
-                onNotification: (scrollNotification) {
-                  if (scrollNotification is ScrollUpdateNotification &&
-                      scrollNotification.depth == 0) {
-                    //通过depth来过滤指定的widget发出的滚动事件,depth ==0 标示最外层的列表listview 发出的滚动事件 且是列表滚动的时间
-                    _onScroll(scrollNotification.metrics.pixels);
-                  }
-                  return false;
-                },
-                child: _listView)),
-        _appBar
-      ],
-    )
+        body: LoadingContainer(
+            child: Stack(
+              children: [_contentView, _appBar],
+            ),
+            isLoading: _isLoading)
 
         // appBar: AppBar(
         //   backgroundColor: Colors.blue,
@@ -115,6 +107,23 @@ class _HomePageState extends State<HomePage>
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
+
+  get _contentView => MediaQuery.removePadding(
+      removeTop: true, //移除顶部空白
+      context: context,
+      child: RefreshIndicator(
+          color: Colors.blue,
+          child: NotificationListener(
+              onNotification: (scrollNotification) {
+                if (scrollNotification is ScrollUpdateNotification &&
+                    scrollNotification.depth == 0) {
+                  //通过depth来过滤指定的widget发出的滚动事件,depth ==0 标示最外层的列表listview 发出的滚动事件 且是列表滚动的时间
+                  _onScroll(scrollNotification.metrics.pixels);
+                }
+                return false;
+              },
+              child: _listView),
+          onRefresh: _handleRefresh));
 
   void _onScroll(double pixels) {
     print('offset : $pixels');
@@ -142,9 +151,13 @@ class _HomePageState extends State<HomePage>
         bannerList = result!.activity ?? [];
         navStatic = result.navStatic ?? [];
         navActive = result.navActive ?? [];
+        _isLoading = false;
       });
     } catch (error) {
       debugPrint('错误信息是: $error');
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 }

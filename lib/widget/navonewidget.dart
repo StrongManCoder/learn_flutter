@@ -12,11 +12,13 @@ class Navonewidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.fromLTRB(7, 4, 7, 4),
-      height: 80.px,
+      height: 65.px,
       decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(Radius.circular(6))),
-      child: Padding(padding: const EdgeInsets.all(7), child: _items(context)),
+      child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 3, 20, 3),
+          child: _items(context)),
     );
   }
 
