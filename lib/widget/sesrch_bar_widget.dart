@@ -52,13 +52,31 @@ class _SesrchBarWidgetState extends State<SesrchBarWidget> {
 
   Widget get _normalSearchBar => Row(
         children: [
-          //左侧返回按钮
-          _warpTap(
-              Padding(
-                padding: EdgeInsets.fromLTRB(6, 5, 10, 5),
-                child: _backBtn,
-              ),
-              widget.leftButtonClick),
+          //判断isHideLeft 是否为true  如果为true就返回null 否则返回下面的_warpTap
+          widget.isHideLeft == true
+              ? SizedBox(
+                  width: 20,
+                )
+              : _warpTap(
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(6, 5, 10, 5),
+                    child: Row(
+                      children: [
+                        // _backBtn,
+                        Text(
+                          '北京',
+                          style: TextStyle(color: Colors.black, fontSize: 18),
+                        ),
+                        Icon(
+                          Icons.expand_more,
+                          color: Colors.black,
+                          size: 32,
+                        )
+                      ],
+                    ),
+                  ),
+                  widget.leftButtonClick),
+
           //搜索输入框
           Expanded(child: _inputBox),
           _warpTap(
@@ -66,7 +84,7 @@ class _SesrchBarWidgetState extends State<SesrchBarWidget> {
                 padding: EdgeInsets.fromLTRB(10, 5, 10, 5),
                 child: Text(
                   '搜索',
-                  style: TextStyle(color: Colors.blue, fontSize: 18),
+                  style: TextStyle(color: Colors.blue, fontSize: 20),
                 ),
               ),
               widget.rightButtonClick),
@@ -108,7 +126,13 @@ class _SesrchBarWidgetState extends State<SesrchBarWidget> {
           Expanded(
             child: Container(
               child: Text(
-                '1656464654654khsakjshdkjahjkhkjdakjdshkjsahdkjahd646546546',
+                widget.defaultText ?? '',
+                style: TextStyle(
+                    color: widget.searchBarType == SearchBarType.normal
+                        ? Color(0xffa9a9a9)
+                        : Colors.blue,
+                    fontSize:
+                        widget.searchBarType == SearchBarType.normal ? 14 : 15),
                 overflow: TextOverflow.ellipsis,
                 maxLines: 1,
               ),

@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_flutter/Model/home_model.dart';
-import 'package:learn_flutter/pages/webviewpage.dart';
+import 'package:learn_flutter/util/navigator_util.dart';
 import 'package:learn_flutter/util/screen_adapter_helper.dart';
 
 //封装轮播组件Widget
@@ -53,17 +53,20 @@ class _BannerWidgetState extends State<BannerWidget> {
     return GestureDetector(
       onTap: () {
         //点击跳转内置WebViewPage页面并传入参数model.url
+
+        NavigatorUtil.jumpH5(
+            url: "${model.url}?cityid=1", title: model.name, hideAppBar: false);
         // NavigatorUtil.push(context, WebViewPage(url: model.url));
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => WebViewPage(
-                //model.url 拼接上city=1
-                url: "${model.url}?cityid=1",
-                // url: model.url,
-                title: model.name,
-              ),
-            ));
+        // Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //       builder: (context) => WebViewPage(
+        //         //model.url 拼接上city=1
+        //         url: "${model.url}?cityid=1",
+        //         // url: model.url,
+        //         title: model.name,
+        //       ),
+        //     ));
 
         //TODO  NavigatorUtil
       },

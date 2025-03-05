@@ -17,7 +17,24 @@ class _SearchPageState extends State<SearchPage> {
       ),
       body: Column(
         children: <Widget>[
-          SesrchBarWidget(),
+          SesrchBarWidget(
+            isHideLeft: true,
+            defaultText: "请输入",
+            hint: "请输入",
+            inputBoxClick: () {
+              print("点击了搜索框");
+            },
+            onChange: (value) {
+              print(value);
+            },
+            leftButtonClick: () {
+              print("点击了返回按钮");
+              Navigator.pop(context);
+            },
+            rightButtonClick: () {
+              print("点击了搜索按钮");
+            },
+          ),
         ],
       ),
     );

@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:learn_flutter/Model/home_model.dart';
 import 'package:learn_flutter/dao/home_dao.dart';
 import 'package:learn_flutter/dao/login_dao.dart';
+import 'package:learn_flutter/pages/search_page.dart';
+import 'package:learn_flutter/util/navigator_util.dart';
+import 'package:learn_flutter/util/view_util.dart';
 import 'package:learn_flutter/widget/banner_widget.dart';
 import 'package:learn_flutter/widget/loading_container.dart';
 import 'package:learn_flutter/widget/navonewidget.dart';
+import 'package:learn_flutter/widget/sesrch_bar_widget.dart';
 import 'package:learn_flutter/widget/sub_nav_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,6 +19,8 @@ class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
 }
+
+const searchBarDefaultText = "网红打卡地 景点 酒店 美食";
 
 class _HomePageState extends State<HomePage>
     with AutomaticKeepAliveClientMixin {
@@ -63,18 +69,40 @@ class _HomePageState extends State<HomePage>
         ],
       );
 
-  get _appBar => Opacity(
-      opacity: appBarAlpha,
-      child: Container(
-        margin: EdgeInsets.only(top: 20),
-        height: 100,
-        decoration: const BoxDecoration(color: Colors.white),
-        child: const Center(
-            child: Padding(
-          padding: EdgeInsets.only(top: 20),
-          child: Text('首页'),
-        )),
-      ));
+  get _appBar {
+    double top = MediaQuery.of(context).padding.top;
+
+    return Column(
+      children: [
+        shadowWarp(
+            child: Container(
+                padding: EdgeInsets.only(top: top),
+                height: 60 + top,
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(
+                      (appBarAlpha * 255).toInt(), 255, 255, 255),
+                ),
+                child: SesrchBarWidget(
+                  searchBarType: appBarAlpha > 0.2
+                      ? SearchBarType.homeLite
+                      : SearchBarType.home,
+                  inputBoxClick: _jumpToSearch,
+                  defaultText: searchBarDefaultText,
+                  leftButtonClick: () {
+                    print('返回啊');
+                  },
+                  rightButtonClick: () {
+                    print('搜索啊');
+                  },
+                ))),
+        Container(
+          height: appBarAlpha > 0.2 ? 0.5 : 0,
+          decoration: BoxDecoration(
+              boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 0.5)]),
+        )
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -159,5 +187,9 @@ class _HomePageState extends State<HomePage>
         _isLoading = false;
       });
     }
+  }
+
+  _jumpToSearch() {
+    NavigatorUtil.push(context, SearchPage());
   }
 }
